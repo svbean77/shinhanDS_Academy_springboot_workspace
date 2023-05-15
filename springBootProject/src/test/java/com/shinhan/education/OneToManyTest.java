@@ -29,6 +29,21 @@ public class OneToManyTest {
 //	@Test
 	// PDSBoard에 insert 
 	void insertAll() {
+		// 이 방법으로는 오류 발생
+		// PDSBoard에서 cascade = CascadeType.ALL로 설정함 -> 
+		// save를 할 때 PK가 같으면 update, 다르면 insert가 수행됨
+		// files는 같은 리스트이기 때문에 주소가 같음
+		// board.setFiles()를 진행할 때 주소가 같은 리스트가 들어감 -> '주소가 같기 때문에' 시퀀스의 nextval()이 실행되지 않음 -> PK 중복으로 insert가 진행되지 않음
+//		List<PDSFile> files = new ArrayList<>();
+//		IntStream.range(1, 6).forEach(idx -> {
+//			PDSFile file = PDSFile.builder().pdsfilename("han-" + idx + ".sql").build();
+//			files.add(file); 
+//		});
+//		IntStream.range(20, 30).forEach(i -> {
+//			PDSBoard board = PDSBoard.builder().pname("스프링부트 수업" + i).pwriter("이영희").files2(files).build();
+//			brepo.save(board); // PDSBoard만 저장 -> 알아서 PDSFile에 저장됨
+//		});
+		
 		IntStream.range(20, 30).forEach(i -> {
 			List<PDSFile> files = new ArrayList<>();
 			IntStream.range(1, 6).forEach(idx -> {

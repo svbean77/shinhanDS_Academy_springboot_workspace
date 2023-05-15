@@ -6,12 +6,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.querydsl.core.BooleanBuilder;
 import com.shinhan.education.repository.BoardRepository;
+import com.shinhan.education.repository.PDSBoardRepository;
 import com.shinhan.education.vo.BoardVO;
 import com.shinhan.education.vo.CarVO;
 import com.shinhan.education.vo.QBoardVO;
@@ -23,6 +26,8 @@ import lombok.extern.java.Log;
 public class SampleController {
 	@Autowired
 	BoardRepository brepo;
+	@Autowired
+	PDSBoardRepository pbrepo;
 
 	// day055
 //	@RequestMapping(value = "/sample1", method = RequestMethod.GET)
@@ -90,5 +95,13 @@ public class SampleController {
 		List<BoardVO> blist = (List<BoardVO>) brepo.findAll(builder);
 
 		return blist;
+	}
+	
+	// day057
+	// 실제 환경에서는 @Commig 안해도 되나
+	@GetMapping("/controllerCommit") 
+	String test9() {
+		int result = pbrepo.updateFile(4L, "컨트롤러에서 변경");
+		return "성공: " + result + "건";
 	}
 }

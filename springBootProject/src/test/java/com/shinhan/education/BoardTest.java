@@ -200,6 +200,7 @@ class BoardTest {
 //	@Test
 	// paging
 	void test19() {
+		// 첫 번째 페이지는 0!!!!!
 		Pageable paging = PageRequest.of(24, 10); // 몇 페이지를 볼 것인가, 한 페이지에 개수가 몇 개인가 (한 페이지는 10개씩 있고 24페이지를 보겠다)
 		brepo.findByTitleContainingOrderByTitle("제목", paging).forEach(board -> logger.info(board.toString()));
 	}
