@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+ xmlns="http://www.w3.org/1999/xhtml"
+ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorator="~{/layout/layout1}"> <!-- layout 폴더에 있는 layout1 파일을 레이아웃으로 사용하겠다 -->
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- 부모(layout1)에 jQuery가 있으니까 여기 없어도 됨 -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> -->
+<th:block layout:fragment="style1">
+	<style>
+	.oddStyle {
+		background-color: HoneyDew;
+	}
+	
+	.evenStyle {
+		background-color: LavenderBlush;
+	}
+	
+	.firstStyle {
+		color: blue;
+	}
+	
+	table {
+		border-collapse: collapse;
+		margin: 0px auto;
+	}
+	
+	#tblContent {
+		
+		text-align: center;
+		margin: 0px auto;
+	}
+	
+	th, td {
+	padding: 5px;
+	}
+	</style>
+</th:block>
+</head>
+<body>
+	<div class="panel panel-default" layout:fragment="content1" id="tblContent">
+		<h1>🐣FreeBoard list🐣</h1>
+		<table border="1" th:with="target1='user4', target2='user9'">
+			<tr>
+				<th>index</th>
+				<th>size</th>
+				<th>first, last</th>
+				<th>홀짝 (순서)</th>
+				<th>게시글번호</th>
+				<th>게시글제목</th>
+				<th>작성자</th>
+				<th>4 or 9</th>
+				<th>내용</th>
+				<th>작성일</th>
+				<th>수정일</th>
+				<th>삭제</th>
+			</tr>
+			<tr th:each="board, rowStatus:${boardList}"
+				th:class="${rowStatus.even} ? 'evenStyle' : 'oddStyle'"
+				th:classappend="${rowStatus.first or rowStatus.last} ? 'firstStyle' : ''">
+				<td th:text="|${rowStatus.index} -- ${rowStatus.count}|"></td>
+				<td th:text="|size: ${rowStatus.size}|"></td>
+				<td th:text="|first: ${rowStatus.first}, last ${rowStatus.last}|"></td>
+				<td th:text="|even: ${rowStatus.even}, odd ${rowStatus.odd}|"></td>
+				<td><a th:href="@{/freeboard/detail(bno=${board.bno})}" th:text="${board.bno}"></a></td>
+				<td th:text="${board.title}"></td>
+				<td th:text="${board.writer}"></td>
+				<td th:text="${board.writer == target1 ? '4번' : board.writer == target2 ? '9번' : '-'}"></td>
+				<td th:text="${board.content}"></td>
+				<td th:inline="text">[[${board.regDate}]]</td>
+				<td>[[${board.updateDate}]]</td>
+				<td>
+				<a href="#" th:if="${board.writer == target1}">삭제</a>
+				<span th:unless="${board.writer == target1}">view</span>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<th:block layout:fragment="script1">
+		<script th:inline="javascript"> /* javascript에서 인라인 방법으로 thymeleaf를 사용하겠다고 명시 */
+		var boardList = [[${boardList}]]; /* 이렇게 변경이 되어야 하는데 안되면 1. preference -> language server -> HTML(VSCode) 체크 해제 2. 밑의 방법 */
+		var boardList2 = eval('[[${boardList}]]');
+		$.each(boardList, function(idx, item) {
+			console.log(item);
+		});
+		$.each(boardList2, function(idx, item) {
+			console.log(item);
+		});
+		</script>
+	</th:block>
+</body>
+</html>

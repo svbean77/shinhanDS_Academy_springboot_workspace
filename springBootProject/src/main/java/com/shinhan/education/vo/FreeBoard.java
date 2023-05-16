@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -40,6 +42,7 @@ public class FreeBoard {
 	@UpdateTimestamp
 	private Timestamp updateDate;
 	
+	@JsonIgnore // Jackson이 json 만들 때 해당 칼럼을 무시: toString의 exclude와 비슷하다고 생각하면 됨
 	// 양방향이기 때문에 무슨 칼럼에 묶여있는지 설정 -> mappedBy (n의 board 칼럼과 연결되었으니 board라고 작성)
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "board")
 	List<FreeBoardReply> replies;

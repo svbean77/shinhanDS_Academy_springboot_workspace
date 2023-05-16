@@ -23,7 +23,7 @@ import lombok.extern.java.Log;
 
 @RestController // 현재 jsp, thymeleaf 사용할 것이 아니기 때문에 임시로 restController 사용
 @Log
-public class SampleController {
+public class SampleRestController {
 	@Autowired
 	BoardRepository brepo;
 	@Autowired

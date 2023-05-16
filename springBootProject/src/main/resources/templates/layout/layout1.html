@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<style>
+p {
+	color: red;
+}
+</style>
+<script>
+	alert("부모에서 작성된 JavaScript");
+</script>
+</head>
+<body>
+	<!-- 하위 HTML에서 CSS 재정의할 예정 -->
+	<th:block layout:fragment="style1"></th:block> <!-- style1, content1, script1: 예약어라고 느낄까봐 1을 붙임! 우리가 이름 정하는 것 -->
+	<!-- fragment 삽입하기 -->
+	<header th:replace="fragments/header :: header1"></header> <!-- fragments 폴더 안 header 파일의 header1 조각을 사용해 대체하겠다 (replace) -->
+	<!-- 하위 HTML에서 content 재정의할 예정 -->
+	<div class="panel panel-default" layout:fragment="content1">!!!!!!</div> <!-- 이 layout을 상속받은 자식은 반드시 해당 div를 재정의해야 함 -> 자식의 추가 내용은 여기 작성 -->
+	<footer th:replace="fragments/footer :: footer2"></footer>
+	<!-- 하위 HTML에서 javascript 재정의할 예정  th:block 은 없어지는 태그이다 -->
+	<th:block layout:fragment="script1"> <!-- 자식에서 새로운 script를 작성하고자 한다면 이 블록을 재정의 -->
+	</th:block>
+</body>
+</html>

@@ -32,5 +32,5 @@ public class EmpVO2 {
 	private Integer salary;
 	private Double commission_pct;
 	private Integer manager_id;
-	private Integer department_id;
+//	private Integer department_id; // JoinColumn으로 생성되기 때문에 따로 만들지 않아도 됨
 }

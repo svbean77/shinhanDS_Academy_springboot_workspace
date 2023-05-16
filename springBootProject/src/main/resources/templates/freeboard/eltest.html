@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<H1>Expression Basic Object</H1>
+	<p th:text="|일반 방식: ${boardList[0].title}|"></p>
+	<p>inline: [[${boardList[0].title}]]</p>
+	<p>inline: [[${#vars.boardList[0].title}]]</p>
+	<!-- 사실 #vars.이 생략된 것이다! (결과는 같음) -->
+	<p>List 객체의 크기: [[${boardList.size()}]]</p>
+	<p>thymeleaf 제공 크기: [[${#lists.size(boardList)}]]</p>
+	<p>encoding: [[${#response.characterEncoding}]]</p>
+	<p>설정값: [[${@environment.getProperty('app.title')}]]</p>
+	<!-- application.properties에 있는 값을 가져옴 -->
+	<p>contextPath: [[${#request.contextPath}]]</p>
+	<p>session값: [[${session.userName}]]</p>
+	<p>session값: [[${session['userName']}]]</p>
+	<p>parameter: [[${param.bno}]]</p>
+	<p>parameter: [[${#request.getParameter("bno")}]]</p>
+	<hr>
+
+	<h1>Expression Utility Object</h1>
+	<p th:text="${now}"></p>
+	<p th:text="${#dates.format(now, 'yyyy-MM-dd hh:mm:ss')}"></p>
+	<p th:with="today=${#dates.format(now, 'yyyy-MM-dd hh:mm:ss')}">자주
+		사용하면 변수로: [[${today}]]</p>
+	<p th:text="${price}"></p>
+	<p th:text="${#numbers.formatInteger(price, 3, 'COMMA')}"></p>
+	<p th:text="${#numbers.formatDecimal(price, 15, 10, 'POINT')}"></p>
+	<!-- 소수점 위로 15개, 아래로 10개 -> 위로 넘치면 그냥 보이고 적으면 0 채움 -->
+	<p th:text="${title}"></p>
+	<p th:utext="${#strings.replace(title, 's', '<i><b>S</b></i>')}"></p>
+	<p th:text="${#strings.toUpperCase(title)}"></p>
+	<ul>
+		<li th:each="myword:${#strings.listSplit(title, ' ')}">[[${myword}]]</li>
+	</ul>
+	<h2 th:text="${options}"></h2>
+	<ul>
+	<li th:each="aa:${options}" th:text="${aa}"></li></ul>
+<hr>
+<h1>링크를 걸어보자</h1>
+<p><a th:href="@{http://localhost:8888/app/freeboard/selectAll}">selectAll ver. 전체 주소</a></p>
+<p><a th:href="@{/freeboard/selectAll}">selectAll ver. 절대경로</a></p> <!-- 절대경로: contextPath 이후부터 쓰면 됨 -->
+<p><a th:href="@{~/app/freeboard/selectAll}">selectAll ver. 다른 context</a></p> <!-- 다른 context일 때 contextPath부터 작성 -->
+<p><a th:href="@{selectAll}">selectAll ver. 상대경로</a></p>
+<p><a th:href="@{detail(bno=50)}">detail ver. parameter 전달</a></p>
+</body>
+</html>

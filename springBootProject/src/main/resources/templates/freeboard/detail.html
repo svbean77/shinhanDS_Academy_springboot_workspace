@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="~{/layout/layout1}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="panel panel-default" layout:fragment="content1">
+		<h1>FreeBoard 상세보기</h1>
+		<!-- <p th:text="${board}"></p> -->
+		<!-- 부모 페이지(layout1.html)에서 p 태그의 색을 지정했기 때문에 빨간색으로 보임 -->
+		<p th:text="${board.bno}"></p>
+		<p th:text="${board.title}"></p>
+		<p th:text="${board.writer}"></p>
+		<p th:text="${board.regDate}"></p>
+		<p th:text="${board.updateDate}"></p>
+		<p th:text="${board.content}"></p>
+		<p th:text="${board.replies}"></p>
+	</div>
+</body>
+</html>
