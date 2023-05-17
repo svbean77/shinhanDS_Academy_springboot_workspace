@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="~{/layout/layout1}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<th:block layout:fragment="style1">
+	<style>
+.oddStyle {
+	background-color: HoneyDew;
+}
+
+.evenStyle {
+	background-color: LavenderBlush;
+}
+
+.firstStyle {
+	color: blue;
+}
+
+table {
+	border-collapse: collapse;
+	margin: 0px auto;
+}
+
+#tblContent {
+	width: 80%;
+	text-align: center;
+	margin: 0px auto;
+	text-align: center;
+}
+
+th, td {
+	padding: 5px;
+}
+</style>
+</th:block>
+</head>
+<body>
+	<div class="panel panel-default" layout:fragment="content1">
+		<div id="tblContent">
+			<h1>🐣WebBoard List🐣</h1>
+			<div class="pull-left">
+				<select id="searchType">
+					<option>전체</option>
+					<option value="title" th:selected="${pageVO.type=='title'}">제목</option>
+					<option value="content" th:selected="${pageVO.type=='content'}">내용</option>
+					<option value="writer" th:selected="${pageVO.type=='writer'}">작성자</option>
+				</select> <input type="text" id="searchKeyword" th:value="${pageVO.keyword}">
+				<button id="searchBtn">조건검색</button>
+				<img alt="이미지" th:src="@{/images/muffin.png}" width="50px"
+					height="50px">
+			</div>
+			<div class="pull-right">
+				<a th:href="@{register.do}">게시글 작성</a>
+			</div>
+
+			<p>[[${msg}]]</p>
+
+			<!-- list출력 -->
+			<table class="table table-striped table-bordered"
+				th:with="blist2=${blist.result}">
+				<!-- with: blist2라는 지역변수 만듦 -> content가 필요할 때, page가 필요할 때 다 있으니까 -->
+				<tr class="success">
+					<th>bno</th>
+					<th>title</th>
+					<th>content</th>
+					<th>writer</th>
+					<th>regdate</th>
+				</tr>
+
+				<tbody>
+					<tr th:each="board:${blist2.content}" class="odd gradeX">
+						<td>[[${board.bno}]]</td>
+						<td><a class="boardLink" th:href="${board.bno}">[[${board.title}]]</a>
+							<!-- 댓글수추가 --> <span class="badge">[[${board.replies.size()}]]</span></td>
+						<!-- class=badge: 동그란 모양으로 생김(bootstrap) -->
+						<td>[[${board.content}]]</td>
+						<td>[[${board.writer}]]</td>
+						<td class="center">
+							[[${#dates.format(board.regdate,'yyyy-MM-dd')}]]</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<!-- 이게 PageMaker! 데이터에 따라 1~n 페이지를 설정 -->
+			<!-- paging -->
+			<nav>
+				<div>
+					<ul class="pagination">
+						<li class="page-item" th:if="${blist.prevPage}"><a
+							th:href="${blist.prevPage.pageNumber}+1">PREV
+								[[${blist.prevPage.pageNumber}+1]]</a></li>
+						<li class="page-item"
+							th:classappend="${p.pageNumber==blist.currentPageNum-1}?active:''"
+							th:each="p:${blist.pageList}"><a th:href="${p.pageNumber}+1">[[${p.pageNumber}+1]]</a>
+						</li>
+						<li class="page-item" th:if="${blist.nextPage}"><a
+							th:href="${blist.nextPage.pageNumber}+1">NEXT
+								[[${blist.nextPage.pageNumber}+1]]</a></li>
+					</ul>
+				</div>
+			</nav>
+
+			<!-- 이게 바로 PageVO! 내 페이지에 대한 정보를 들고 다니는 것
+			: 상세 조회, 조건 검색 둘 다 필요하기 때문에 각 행동 시 form의 action을 바꿔줘야 함 (JS에서 form.attr 사용해 action을 수정함) -->
+			<form id="f1" th:action="@{list.do}" method="get">
+				<input type="text" name="page" th:value="${blist.currentPageNum}">
+				<!-- 현재 n페이지를 보고 있다 -->
+				<input type="text" name="size"
+					th:value="${blist.currentPage.pageSize}">
+				<!-- 이 페이지에는 n개의 데이터가 있다 -->
+				<input type="text" name="type" th:value="${pageVO.type}">
+				<!-- 조건이 전체/제목/내용/작성자 -->
+				<input type="text" name="keyword" th:value="${pageVO.keyword}">
+				<!-- 조건 input에 입력한 내용 -->
+			</form>
+		</div>
+
+		<hr>
+		<p>[[${blist}]]</p>
+		<!-- blist까지: 이전,다음페이지 정보, result까지: 현재 페이지 정보, content까지: 페이지에 해당하는 내용들(게시글) -->
+		<p>[[${blist.result}]]</p>
+		<p>[[${blist.result.content}]]</p>
+
+	</div>
+
+	<!-- javascript -->
+	<th:block layout:fragment="script1">
+		<script th:inline="javascript">
+			$(function() {
+				//등록후 추가됨
+				var msg = [[${msg}]];
+				/* if (msg == "success") {
+					alert("정상적으로 등록되었습니다");
+				} */
+				if(msg != null) {
+					alert(msg);
+				}
+				
+				var formObj = $("#f1");
+				$(".pagination a").click(function(e) {
+					e.preventDefault(); // pagenation의 페이지가 이동되는 것을 막음 (페이지 정보를 가져온 후 제출되어야 함)
+					formObj.find("[name='page']").val($(this).attr('href')); // 내가 누른 페이지를 넣어야 함 (page는 내가 현재 보고 있는 페이지이기 때문)
+					formObj.attr("action", "list.do");
+					formObj.submit();
+				});
+
+				// 조건 검색
+				$("#searchBtn").click(function() {
+					var typeStr = $("#searchType").find(":selected").val();
+					var keywordStr = $("#searchKeyword").val();
+					formObj.find("[name='type']").val(typeStr);
+					formObj.find("[name='keyword']").val(keywordStr);
+					formObj.find("[name='page']").val(1);
+					formObj.attr("action", "list.do");
+					formObj.submit();
+				});
+
+				// 상세 보기
+				$(".boardLink")
+						.click(
+								function(e) {
+									e.preventDefault();
+									var boardNo = $(this).attr("href");
+									/* alert(boardNo); */
+									// 상세 검색 후 돌아왔을 때 페이지 정보가 계속 필요하니까 form을 계속 활용
+									formObj.attr("action", "view.do");
+									var bnoObj = formObj.find("[name='bno']");
+									console.log(bnoObj);
+									if (!$(bnoObj).val()) {
+										formObj
+												.append("<input type='text' name='bno' value='"+boardNo+"'>");
+									} else {
+										$(bnoObj).val(boardNo);
+									}
+									formObj.submit();
+								});
+			});
+		</script>
+	</th:block>
+</body>
+</html>

@@ -43,7 +43,7 @@ public class WebReply {
 	@UpdateTimestamp // 생성시 생성일자, 수정시 변경된다.
 	private Timestamp updatedate;
 
-	// @JsonIgnore
+	@JsonIgnore // 댓글을 불러올 때 board 정보가 아닌 댓글만 보여야 함 -> json으로 만들 때 제외시키기
 	// @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@ManyToOne(fetch = FetchType.LAZY) // lazy로 변경해도 OneToMany에서 Lazy가 그대로 수행~
 	// @JoinColumn(name="board_bno")

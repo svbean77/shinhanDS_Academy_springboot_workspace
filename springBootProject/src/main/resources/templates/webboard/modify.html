@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="~{/layout/layout1}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<th:block layout:fragment="style1">
+	<style>
+.oddStyle {
+	background-color: HoneyDew;
+}
+
+.evenStyle {
+	background-color: LavenderBlush;
+}
+
+.firstStyle {
+	color: blue;
+}
+
+table {
+	border-collapse: collapse;
+	margin: 0px auto;
+}
+
+#tblContent {
+	width: 70%;
+	text-align: center;
+	margin: 0px auto;
+}
+
+th, td {
+	padding: 5px;
+}
+</style>
+</th:block>
+</head>
+<body>
+	<div class="panel panel-default" layout:fragment="content1">
+		<div id="tblContent">
+			<h1>🐣WebBoard Detail🐣</h1>
+			<div class="panel-heading">게시글 수정하자~~~~</div>
+			<div class="panel-body">
+				<form id="f1">
+					<div class="form-group">
+						<label>BNO</label><input class="form-control" name="bno"
+							th:value="${board.bno}" readonly="readonly" />
+					</div>
+					<div class="form-group">
+						<label>Title</label><input class="form-control" name="title"
+							th:value="${board.title}" />
+					</div>
+					<div class="form-group">
+						<label>Content</label>
+						<textarea class="form-control" rows="3" name="content"
+							th:text="${board.content}"></textarea>
+					</div>
+					<div class="form-group">
+						<label>Writer</label> <input class="form-control" name="writer"
+							th:value="${board.writer}" />
+					</div>
+					<input type="text" name="page" th:value="${pageVO.page}"> <input
+						type="text" name="size" th:value="${pageVO.size}"> <input
+						type="text" name="type" th:value="${pageVO.type}"> <input
+						type="text" name="keyword" th:value="${pageVO.keyword}">
+						<!-- regdate는 사용하지 않을 것이지만 update 시 그대로 있어야 하기 때문에 hidden으로 데이터만 전달 -->
+						<input type="hidden" class="form-control" name="regdate"
+							th:value="${board.regdate}" /> 
+				</form>
+			</div>
+			<div class="pull_right">
+				<a class="btn btn-warning modbtn">Modify</a> <a
+					class="btn btn-danger delbtn">Delete</a> <a class="btn btn-primary"
+					th:href="@{list.do(page=${pageVO.page}, 
+    size=${pageVO.size}, type=${pageVO.type}, 
+    keyword=${pageVO.keyword},bno=${board.bno})}">Cancel
+					&amp; Go List</a>
+			</div>
+		</div>
+	</div>
+
+	<th:block layout:fragment="script1">
+		<script th:inline="javascript">
+			// 어차피 삭제, 수정 버튼이 2개이기 때문에 form에 action을 작성하지 않고 js에서 속성을 추가하도록 코드를 작성함
+			var formObj = $("#f1");
+			$(".delbtn").click(function() {
+				formObj.attr("action", "delete.do");
+				formObj.attr("method", "post"); // form은 restful이 아니기 때문에 delete가 없음
+				formObj.submit();
+			});
+			$(".modbtn").click(function() {
+				formObj.attr("action", "modify.do");
+				formObj.attr("method", "post"); // form은 restful이 아니기 때문에 put이 없음
+				formObj.submit();
+			});
+		</script>
+	</th:block>
+
+</body>
+</html>
