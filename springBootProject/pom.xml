@@ -12,12 +12,20 @@
 	<groupId>com.shinhan</groupId>
 	<artifactId>springbootproject</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<!-- jar: tomcat이 내장되어 있음 war: tomcat에 프로젝트를 배포해야 함 -->
+	<packaging>jar</packaging>
 	<name>springBootProject</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>8</java.version>
 	</properties>
 	<dependencies>
+		<!-- day060: 썸네일 관련 -->
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.6</version>
+		</dependency>
 		<!-- day058: 레이아웃 -->
 		<dependency>
 			<groupId>nz.net.ultraq.thymeleaf</groupId>

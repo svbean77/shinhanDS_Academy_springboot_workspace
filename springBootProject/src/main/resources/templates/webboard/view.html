@@ -80,10 +80,11 @@ th, td {
 		</div>
 
 		<div id="commentContent">
-				<div class="pull_right">
-					<button data-toggle="modal" data-target="#myModal"
-						class="btn btn-warning" id="addReply">댓글추가</button>
-				</div>
+			<h2>댓글 정보</h2>
+			<div class="pull_right">
+				<button data-toggle="modal" data-target="#myModal"
+					class="btn btn-warning" id="addReplyBtn">댓글추가</button>
+			</div>
 			<table class="table table-striped table-bordered  table-hover">
 				<thead>
 					<tr>
@@ -108,12 +109,12 @@ th, td {
 					</div>
 					<div class="modal-body">
 						<label>rno</label> <input type="text" name="rno"
-							class="form-control"> <label>ReplyText</label> <input
+							class="form-control" readonly> <label>ReplyText</label> <input
 							type="text" name="replyText" class="form-control"> <label>Replyer</label>
 						<input type="text" name="replyer" class="form-control">
 					</div>
 					<div class="modal-footer">
-						<button id="modalDelBtn" class="btn btn-info">Save</button>
+						<button id="modalSaveBtn" class="btn btn-info">Save</button>
 						<button id="modalDelBtn" class="btn btn-info">Delete</button>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					</div>
@@ -125,9 +126,21 @@ th, td {
 	</div>
 	<th:block layout:fragment="script1">
 		<script th:inline="javascript" th:src="@{'/js/reply.js'}"></script>
+		<!-- external js를 import해서 사용 -->
 		<script th:inline="javascript">
+			/* external js를 통해 만들어진 replyManager를 이용 */
+			/* 즉시 실행 함수를 사용하는 방법 - 변수, 변수, 함수 */
+			console.log(externalFunc.myname);
+			console.log(externalFunc.mycompany);
+			/* externalFunc.work(); */
+
+			/* 전체 댓글 조회 */
 			replyManager.getAll("[[${board.bno}]]", printList);
-			function printList(rList) {
+			function printList(rList, status, xhr) {
+				/* ajax success: function(result, status, xhr) {} */
+				/* HttpStatus.OK -> 200, HttpStatus.CREATED -> 201 (문자는 success로 동일) */
+				console.log(status);
+				console.dir(xhr);
 				var str = "";
 				$.each(rList, function(idx, item) {
 					str += "<tr>";
@@ -138,6 +151,71 @@ th, td {
 				});
 				$("#replyTable").html(str);
 			}
+
+			/* 댓글 입력 */
+			var mode = "";
+			var rno = $("input[name='rno']");
+			var replyText = $("input[name='replyText']");
+			var replyer = $("input[name='replyer']");
+
+			$("#addReplyBtn").click(function() {
+				mode = "ADD";
+				/* alert("add클릭"); */
+				rno.val("");
+				replyText.val("");
+				replyer.val("");
+				$("#myModal").show();
+				$(".modal-title").text("댓글을 추가합니다.")
+			});
+
+			/* 댓글 수정 */
+			$("#replyTable").on("click", "tr", function() {
+				mode = "MOD";
+				var tds = $(this).find("td");
+				var no = tds[0].innerHTML; /* td의 사이에 있는 문자를 읽어야 하기 때문에 innerHTML */
+				var reply = tds[1].innerHTML;
+				var replyer = tds[2].innerHTML;
+				$("input[name='rno']").val(no);
+				$("input[name='replyText']").val(reply);
+				$("input[name='replyer']").val(replyer);
+				$("#myModal").show();
+				$(".modal-title").text("수정 또는 삭제 작업")
+			});
+
+			/* 댓글 입력, 수정 */
+			$("#modalSaveBtn").click(function() {
+				var obj = {
+					"bno" : "[[${board.bno}]]",
+					"replyText" : replyText.val(),
+					"replyer" : replyer.val()
+				};
+				if (mode == "ADD") {
+					replyManager.add(obj, printList);
+					alert("입력완료");
+				} else if (mode == "MOD") {
+					obj["rno"] = rno.val();
+					replyManager.update(obj, printList);
+					alert("수정완료");
+				}
+				rno.val("");
+				replyText.val("");
+				replyer.val("");
+				$("#myModal").modal("hide");
+			});
+
+			/* 댓글 삭제 */
+			$("#modalDelBtn").click(function() {
+				var obj = {
+					"bno" : "[[${board.bno}]]", /* 삭제 후 다시 조회해야 하기 때문에 bno도 필요함 */
+					"rno" : rno.val() 
+				};
+				replyManager.remove(obj, printList);
+				alert("삭제완료");
+				rno.val("");
+				replyText.val("");
+				replyer.val("");
+				$("#myModal").modal("hide");
+			});
 		</script>
 	</th:block>
 </body>

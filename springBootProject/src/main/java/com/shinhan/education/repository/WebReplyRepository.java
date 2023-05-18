@@ -8,5 +8,5 @@ import com.shinhan.education.vo3.WebBoard;
 import com.shinhan.education.vo3.WebReply;
 
 public interface WebReplyRepository extends PagingAndSortingRepository<WebReply, Long>{
-	List<WebReply> findByBoard(WebBoard board);
+	List<WebReply> findByBoardOrderByRnoDesc(WebBoard board);
 }

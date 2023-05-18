@@ -70,7 +70,7 @@ public class WebBoardReplyTest {
 			}
 			
 			log.info("reply 입장에서 구함");
-			rrepo.findByBoard(board).forEach(reply -> log.info(reply.toString())); 
+			rrepo.findByBoardOrderByRnoDesc(board).forEach(reply -> log.info(reply.toString())); 
 		});
 	}
 	
