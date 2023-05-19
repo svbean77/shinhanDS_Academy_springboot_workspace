@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorator="~{/layout/layout1}">
+	layout:decorator="~{layout/layout1}">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -72,6 +72,7 @@ th, td {
 					<input th:if="${board.regdate==null}" class="form-control"
 						name="regdate"
 						th:value="${#calendars.format(#calendars.createNow(),'yyyy-MM-dd hh:mm:ss')}" />
+					<input type="text" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
 				</form>
 			</div>
 			<div class="pull_right">

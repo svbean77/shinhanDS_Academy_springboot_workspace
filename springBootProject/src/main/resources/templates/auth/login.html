@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" 
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout1}">
+<head>
+<title>Hello Spring Security</title>
+<meta charset="utf-8" />
+</head>
+<body>
+	<div class="panel panel-default" layout:fragment="content1">
+		<div class="panel-body">
+			<h2>CUSTOM LOGIN PAGE</h2>
+			<!-- 
+			<div th:if="${param.error != null}">
+			    <h2>아이디와 비밀번호 틀림</h2>
+			    <h2 th:value="${param.error}"></h2>
+			</div>
+			<div th:if="${param.logout!= null}">
+			    <h2>로그아웃됨</h2>    
+			</div>
+			 -->
+			<form method="post"  >
+				<p>
+				<!-- name 변경이 불가능한 이유: springSecurity가 이해할 수 있는 데이터를 전송해줘야 함 (그래야 securiy user를 만드니까) -->
+					<label for="username">Username</label> <input type="text"
+						id="username" name="username" value="user1" />  <!-- 이름변경불가  : username -->
+				</p>
+				<p>
+					<label for="password">Password</label> 
+					<input type="password"
+						id="password" name="password" value="1234" /> <!-- 이름변경불가  : password -->
+				</p>			
+
+				<!-- 토큰을 항상 들고다녀야 함 -> post, put, delete 요청 시 토큰이 필요하기 때문 -->
+				<input type="text" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+				<button type="submit" class="btn btn-primary" >Log in</button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

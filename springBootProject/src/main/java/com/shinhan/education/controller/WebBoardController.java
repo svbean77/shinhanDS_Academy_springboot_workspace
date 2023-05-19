@@ -94,8 +94,8 @@ public class WebBoardController {
 	}
 	@PostMapping("/delete.do")
 	public String deletePost(WebBoard board, PageVO pageVO, RedirectAttributes attr) {
-		brepo.delete(board); // update 하면서 코드 에러로 regdate가 사라졌었음 -> 삭제하려는 객체가 없어 에러
-//		brepo.deleteById(bno); // 따라서 regdate parsing 에러를 피하기 위해 board가 아닌 bno로 parameter를 받음(인데 다음날 해보니 되네)
+//		brepo.delete(board); // update 하면서 코드 에러로 regdate가 사라졌었음 -> 삭제하려는 객체가 없어 에러
+		brepo.deleteById(board.getBno()); // 따라서 regdate parsing 에러를 피하기 위해 board가 아닌 bno로 parameter를 받음(인데 다음날 해보니 되네)
 		// addFlashAttribute: 새로고침하면 사라짐 -> 일회성 (새로고침을 하면 msg가 없음)
 		// addAttribute: 새로고침해도 유지
 		attr.addFlashAttribute("msg", "게시글 삭제 작업 완료~!");

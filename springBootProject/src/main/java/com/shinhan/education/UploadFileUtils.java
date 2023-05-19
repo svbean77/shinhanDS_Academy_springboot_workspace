@@ -21,6 +21,8 @@ public class UploadFileUtils {
 		FileCopyUtils.copy(fileData, target);
 		String thumbFileName = "s_" + newFileName;
 		File image = new File(imgPath + File.separator + newFileName);
+		
+		// 여기는 썸네일을 만드는 코드 -> 따로 함수를 빼서 첫 사진에 대해서만 실행해주면 될 것 같다!
 		File thumbnail = new File(imgPath + File.separator + "s" + File.separator + thumbFileName);
 		if (image.exists()) {
 			thumbnail.getParentFile().mkdirs();

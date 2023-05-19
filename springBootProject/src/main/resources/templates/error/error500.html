@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorator="~{/layout/layout1}">
+	layout:decorator="~{layout/layout1}">
 <head>
 <meta charset="UTF-8">
 <th:block layout:fragment="style1">
@@ -22,6 +22,14 @@ div {
 		<img th:src="@{/images/fox5.jpg}" />
 		<h1>😿문제 발생: 500😿</h1>
 		<h2 th:text="${msg}"></h2>
+		<p>[[${errorMap.timestamp}]]</p> <!-- 에러 발생 시간 -->
+		<p>[[${errorMap.status}]]</p> <!-- 에러 코드 -->
+		<p>[[${errorMap.error}]]</p> <!-- 에러 이름 -->
+		<p>[[${errorMap.path}]]</p> <!-- 에러 발생 주소 -->
+		<p>[[${errorMap.message}]]</p> <!-- 에러메시지 -->
+		<!-- 에러 종류 - 보안 관련 500에러 시 오류 발생 -->
+		<!-- 주석 처리를 해도 $가 해석되기 때문에 위의 에러 출력 사이에 두면 밑의 에러는 보이지 않음 -->
+		<!-- <p>[[${errorMap.exception}]]</p> --> 
 	</div>
 </body>
 </html>

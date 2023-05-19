@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" 
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout1}">
+<head>
+<title>Hello Spring Security</title>
+<meta charset="utf-8" />
+</head>
+<body>
+	<div class="panel panel-default" layout:fragment="content1"> 
+	   <ul>
+	   <li class="nav-item">  
+	   	 	<a class="nav-link" href="#" th:href="@{~/app}"><i class="fa fa-home"></i>index페이지로이동</a>
+		</li>
+
+
+		
+		<li sec:authorize="isAuthenticated()" class="nav-item">
+	    	<a class="nav-link" href="#" th:href="@{~/app/webboard/list.do}">다 보이는 boardlist</a>
+		</li>
+		<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+	   	 <a class="nav-link" href="#" th:href="@{~/app/admin}">admin만 보이는 Admin페이지로 이동</a>
+		</li>
+ 		<li sec:authorize="hasRole('ROLE_MANAGER')" class="nav-item">
+	   	 <a class="nav-link" href="#" th:href="@{~/app/manager}">manager만 보이는 manager페이지로 이동</a>
+		</li>
+ 		<li class="nav-item">  
+	   	 	<a class="nav-link" href="#" th:href="@{/manager}"><i class="fa fa-home"></i>다 보이는 manager페이지로이동</a>
+        </li>
+        <li class="nav-item">  
+	   	 	<a class="nav-link" href="#" th:href="@{/admin}"><i class="fa fa-home"></i>다 보이는 admin페이지로이동</a>
+        </li>
+		</ul>
+	 
+	</div>
+ 
+	
+
+</body>
+</html>
+

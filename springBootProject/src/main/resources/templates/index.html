@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout1}">
+
+<head>
+<title>Hello Spring Security</title>
+<meta charset="utf-8" />
+
+</head>
+<body>
+
+	<div class="panel panel-default" layout:fragment="content1">
+		<div class="panel-body">
+			!!index page입니다.
+			<p sec:authorize="isAuthenticated()">
+				<script>
+					console.log("인증됨");
+				</script>
+			</p>
+			<a th:href="admin">admin page방문?</a>
+		</div>
+		<h1>로그인한 사용자 방법 여러가지</h1>
+		<table border="1">
+			<tr>
+				<td>securityUser에서의 username = id</td>
+				<td>[[${session.user.username}]]</td>
+			</tr>
+			<tr>
+				<td>내가 직접 저장한 MemberDTO의 mname = 이름</td>
+				<td>[[${session.member.mname}]]</td>
+			</tr>
+			<tr>
+				<td>sec:authentication의 Username = id</td> <!-- sec 라이브러리가 있다면 로그인 사용자를 세션에 저장하지 않아도 됨!!!!! -->
+				<td><span sec:authentication="principal.Username"></span></td>
+			</tr>
+			<tr>
+				<td>Authorities</td>
+				<td><span sec:authentication="principal.authorities"></span> <span
+					sec:authentication="principal"></span></td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

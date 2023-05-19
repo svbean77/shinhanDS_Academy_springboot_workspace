@@ -27,7 +27,7 @@ public class UploadController {
 
 	@PostMapping("/shop/register")
 	public String register(@RequestParam MultipartFile[] files, HttpServletRequest req) throws IOException, Exception {
-		String imgUploadPath = uploadPath + File.separator + "upload"; // File.seperator: '/' -> upload라는 폴더를 만들겠다는 의미
+		String imgUploadPath = uploadPath + File.separator + "upload"; // File.seperator: '\' -> upload라는 폴더를 만들겠다는 의미
 		
 		// 폴더 생성
 		String ymdPath = UploadFileUtils.calcPath(imgUploadPath);
