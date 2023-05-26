@@ -34,13 +34,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	protected void configure(HttpSecurity http) throws Exception {
 		log.info("!!!!!!security config..........");
-//		http.csrf().disable();
+		http.csrf().disable();
 		// ****disable가 아니면 post,put, delete방식의 요청시 반드시 csrf 토큰을 가지고 post요청해야한다.
 		// 1) antMatchers url 패턴에 대한 접근허용
 		// 2) permitAll: 모든사용자가 접근가능하다는 의미
 		// 3) hasRole : 특정권한을 가진 사람만 접근가능하다는 의미
 		http.authorizeRequests() // HttpServletRequest에 따라 접근(access)을 제한
-				.antMatchers("/error", "/hello/**", "/auth/**", "/login/**", "/oauth2/**", "/h2-console/**", "/index")
+				.antMatchers("/error", "/hello/**", "/auth/**", "/login/**", "/oauth2/**", "/h2-console/**", "/index", "/**")
 				.permitAll() // 로그인없이 허용 -> 로그인 없어도 가능한 애들을 하나의 폴더로 구분하는게 좋을 것 같다!
 				.antMatchers("/admin/**").hasRole("ADMIN") // /admin으로 시작하는 경로는 ADMIN롤을 가진 사용자만 접근 가능(자동으로 ROLE_가 삽입)
 				.antMatchers("/manager/**").hasRole("MANAGER")

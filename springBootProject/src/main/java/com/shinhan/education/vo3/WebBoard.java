@@ -54,7 +54,7 @@ public class WebBoard {
 
 	@BatchSize(size = 100)
 	@JsonIgnore
-	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.EAGER) //, orphanRemoval = true)
 	List<WebReply> replies;
 	// @OneToMany와 @ManyToMany는 기본이 지연 로딩(LAZY)이다.
 	// @ManyToOne이 EAGER임. 양방향이므로 reply에서 board정보필요하므로 N번 호출됨
